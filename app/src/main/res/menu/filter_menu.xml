@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menu_sort_by_name"
+        android:title="Sort By name"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/menu_sort_by_age"
+        android:title="Sort By Age"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/menu_sort_by_city"
+        android:title="Sort By City"
+        app:showAsAction="never" />
+</menu>

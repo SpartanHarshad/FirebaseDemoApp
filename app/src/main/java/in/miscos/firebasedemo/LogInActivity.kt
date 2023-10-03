@@ -19,7 +19,7 @@ class LogInActivity : AppCompatActivity() {
     private fun perFormLogIn() {
         binding.btnLogin.setOnClickListener {
             val userName = binding.etvUserName.text.toString()
-            val password = binding.etvUserName.text.toString()
+            val password = binding.etvPassword.text.toString()
             if (validateUserName(userName) && validatePassword(password)) {
                 startActivity(Intent(this, MainActivity::class.java))
             }
@@ -43,7 +43,7 @@ class LogInActivity : AppCompatActivity() {
             true
         } else {
             binding.etvPassword.error =
-                "Password must be 7 Characters with 1UpperCase Alphabet and 1SpecialCharacter and Numeric"
+                "Password must be 7 Characters. \n1 UpperCase Alphabet \n1 SpecialCharacter \n1 Numeric"
             false
         }
     }
@@ -52,7 +52,7 @@ class LogInActivity : AppCompatActivity() {
         return if (userName.length >= 10) {
             true
         } else {
-            binding.etvUserName.error = "Username must be10 characters"
+            binding.etvUserName.error = "Username must be 10 characters"
             false
         }
     }
