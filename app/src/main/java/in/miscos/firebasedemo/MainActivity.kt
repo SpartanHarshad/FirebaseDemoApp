@@ -7,6 +7,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
@@ -18,31 +19,38 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var mFirebaseDbRef: DatabaseReference
+    val userList = mutableListOf<UserItem>()
+    lateinit var userAdapter: UserAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         setSupportActionBar(binding.toolbar)
         mFirebaseDbRef = FirebaseDatabase.getInstance().getReference("/Members")
         observeUSerList()
+        initRecyclerView()
+    }
+
+    private fun initRecyclerView() {
+        binding.rvUserList.layoutManager = LinearLayoutManager(this)
+        userAdapter = UserAdapter(userList)
+        binding.rvUserList.adapter = userAdapter
     }
 
     private fun observeUSerList() {
         val valueEventListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                // Initialize a list to hold the items
-                val userList = mutableListOf<UserItem>()
-
-                for (snapshot in dataSnapshot.children) {
-                    val item = snapshot.getValue(UserItem::class.java)
-                    item?.let {
-                        userList.add(it)
+                try {
+                    for (snapshot in dataSnapshot.children) {
+                        val item = snapshot.getValue(UserItem::class.java)
+                        userList.add(UserItem(item?.Age, item?.City, item?.name))
                     }
-                }
-
-                // Do something with the retrieved itemList
-                // For example, update the UI or log the items
-                userList.forEach {
-                    Log.d("Item", "Name: ${it.name}, age: ${it.age}")
+                    userAdapter.sortUserList(userList)
+                } catch (exp: Exception) {
+                    Toast.makeText(
+                        this@MainActivity,
+                        "Fail due to ${exp.localizedMessage}",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
 
@@ -52,7 +60,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-         // Attach the listener to the database reference
         mFirebaseDbRef.addValueEventListener(valueEventListener)
     }
 
