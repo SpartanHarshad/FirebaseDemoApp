@@ -21,11 +21,30 @@ class UserAdapter(var users: List<UserItem>) : RecyclerView.Adapter<UserAdapter.
         holder.setData(users[position])
     }
 
-    fun sortUserList(newUsers: List<UserItem>){
-        users=newUsers
+    fun updateUserList(newUsers: List<UserItem>) {
+        users = newUsers
         notifyDataSetChanged()
     }
-    inner class UserViewHolder(val binding:ItemLayoutBinding) :
+
+    fun sortByAge() {
+        val sorted = users.sortedBy { it.Age }
+        users = sorted
+        notifyDataSetChanged()
+    }
+
+    fun sortByName() {
+        val sorted = users.sortedBy { it.name }
+        users = sorted
+        notifyDataSetChanged()
+    }
+
+    fun sortByCity() {
+        val sorted = users.sortedBy { it.City }
+        users = sorted
+        notifyDataSetChanged()
+    }
+
+    inner class UserViewHolder(val binding: ItemLayoutBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun setData(userItem: UserItem) {

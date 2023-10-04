@@ -41,14 +41,14 @@ class MainActivity : AppCompatActivity() {
         val valueEventListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 try {
-                    binding.progressCircular.visibility= View.GONE
+                    binding.progressCircular.visibility = View.GONE
                     for (snapshot in dataSnapshot.children) {
                         val item = snapshot.getValue(UserItem::class.java)
                         userList.add(UserItem(item?.Age, item?.City, item?.name))
                     }
-                    userAdapter.sortUserList(userList)
+                    userAdapter.updateUserList(userList)
                 } catch (exp: Exception) {
-                    binding.progressCircular.visibility= View.GONE
+                    binding.progressCircular.visibility = View.GONE
                     Toast.makeText(
                         this@MainActivity,
                         "Fail due to ${exp.localizedMessage}",
@@ -58,7 +58,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
-                binding.progressCircular.visibility= View.GONE
+                binding.progressCircular.visibility = View.GONE
                 // Handle any errors here
                 Log.w("FirebaseDatabase", "Failed to read value.", databaseError.toException())
             }
@@ -75,20 +75,17 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_sort_by_age -> {
-                userList.sortBy { it.Age }
-                userAdapter.sortUserList(userList)
+                userAdapter.sortByAge()
                 true
             }
 
             R.id.menu_sort_by_name -> {
-                userList.sortBy { it.name }
-                userAdapter.sortUserList(userList)
+                userAdapter.sortByName()
                 true
             }
 
             R.id.menu_sort_by_city -> {
-                userList.sortBy { it.City }
-                userAdapter.sortUserList(userList)
+                userAdapter.sortByCity()
                 true
             }
 
